@@ -11,7 +11,7 @@ import ErrorPage from './ErrorPage';
 
 export default function Base() {
   return (
-    <Router basename={process.env.REACT_APP_PUBLIC_URL}>
+    <Router>
       <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
@@ -21,6 +21,6 @@ export default function Base() {
         <Route component={ErrorPage} />
       </Switch>
       <Footer />
-    </Router >
+    </Router>
   )
 }
