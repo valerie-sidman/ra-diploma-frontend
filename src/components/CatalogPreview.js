@@ -1,7 +1,7 @@
 import React from 'react';
 import CatalogBody from './CatalogBody';
 
-export default function Catalog() {
+export default function CatalogPreview() {
 
   return (
     <main className="container">
@@ -9,10 +9,6 @@ export default function Catalog() {
         <div className="col">
           <section className="catalog">
             <h2 className="text-center">Каталог</h2>
-
-            <form className="catalog-search-form form-inline">
-              <input className="form-control" placeholder="Поиск" />
-            </form>
 
             <CatalogBody />
 
