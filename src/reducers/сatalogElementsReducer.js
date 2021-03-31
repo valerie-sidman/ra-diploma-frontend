@@ -1,11 +1,13 @@
 import {
   FETCH_CATALOG_ELEMENTS_REQUEST,
   FETCH_CATALOG_ELEMENTS_FAILURE,
-  FETCH_CATALOG_ELEMENTS_SUCCESS
+  FETCH_CATALOG_ELEMENTS_SUCCESS,
+  FETCH_MORE_ELEMENTS_SUCCESS
 } from '../actions/actionTypes';
 
 const initialState = {
   catalogElements: [],
+  stock: false,
   loadingCatalogElements: false,
   elementsError: null,
 }
@@ -16,6 +18,7 @@ export default function сatalogElementsReducer(state = initialState, action) {
       return {
         ...state,
         catalogElements: state.catalogElements,
+        stock: false,
         loadingCatalogElements: true,
         elementsError: null,
       }
@@ -24,6 +27,7 @@ export default function сatalogElementsReducer(state = initialState, action) {
       return {
         ...state,
         catalogElements: state.catalogElements,
+        stock: false,
         loadingCatalogElements: false,
         elementsError: error,
       }
@@ -32,6 +36,18 @@ export default function сatalogElementsReducer(state = initialState, action) {
       return {
         ...state,
         catalogElements,
+        stock: catalogElements.length === 6,
+        loadingCatalogElements: false,
+        elementsError: null,
+      }
+    case FETCH_MORE_ELEMENTS_SUCCESS:
+      const { moreElements } = action.payload;
+      const newCatalogElements = state.catalogElements.concat(moreElements);
+      console.log(newCatalogElements);
+      return {
+        ...state,
+        catalogElements: newCatalogElements,
+        stock: catalogElements.length === 6,
         loadingCatalogElements: false,
         elementsError: null,
       }

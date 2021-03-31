@@ -2,11 +2,13 @@ import { createStore, combineReducers } from "redux";
 import hitsReducer from "../reducers/hitsReducer";
 import categoriesReducer from "../reducers/categoriesReducer";
 import сatalogElementsReducer from "../reducers/сatalogElementsReducer";
+import elementReducer from "../reducers/elementReducer";
 
 const reducer = combineReducers({
   serviceHits: hitsReducer,
   serviceCategories: categoriesReducer,
   serviceCatalogElements: сatalogElementsReducer,
+  serviceElement: elementReducer,
 })
 
 const store = createStore(

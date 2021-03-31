@@ -7,7 +7,7 @@ import About from './About';
 import Contacts from './Contacts';
 import Footer from './Footer';
 import ErrorPage from './ErrorPage';
-
+import Product from './Product';
 
 export default function Base() {
   return (
@@ -15,7 +15,8 @@ export default function Base() {
       <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route path="/catalog" component={Catalog} />
+        <Route exact path="/catalog" component={Catalog} />
+        <Route path="/catalog/:id([0-9]+)?" component={Product} />
         <Route path="/about" component={About} />
         <Route path="/contacts" component={Contacts} />
         <Route component={ErrorPage} />

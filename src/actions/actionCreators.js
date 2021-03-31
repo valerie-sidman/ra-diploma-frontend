@@ -5,10 +5,15 @@ import {
   FETCH_CATEGORIES_REQUEST,
   FETCH_CATEGORIES_FAILURE,
   FETCH_CATEGORIES_SUCCESS,
+  CHANGE_CATEGORIES_CLASSNAME,
   FETCH_CATALOG_ELEMENTS_REQUEST,
   FETCH_CATALOG_ELEMENTS_FAILURE,
   FETCH_CATALOG_ELEMENTS_SUCCESS,
-  CHANGE_CATEGORIES_CLASSNAME,
+  FETCH_MORE_ELEMENTS_SUCCESS,
+  FETCH_ELEMENT_REQUEST,
+  FETCH_ELEMENT_FAILURE,
+  FETCH_ELEMENT_SUCCESS,
+  // SELECT_SIZE
 } from './actionTypes';
 
 // HITS
@@ -126,9 +131,31 @@ export function fetchCatalogElementsSuccess(catalogElements) {
   }
 }
 
-export const fetchCatalogElements = (dispatch, categoryId) => {
+// MORE ELEMENTS SUCCESS for fetchCatalogElements
+
+export function fetchMoreElementsSuccess(moreElements) {
+  return {
+    type: FETCH_MORE_ELEMENTS_SUCCESS,
+    payload: { moreElements }
+  }
+}
+
+export const fetchCatalogElements = (dispatch, categoryId, offset) => {
   dispatch(fetchCatalogElementsRequest());
-  if (categoryId >= 0) {
+  if (categoryId >= 0 && offset) {
+    fetch(`http://localhost:7070/api/items?categoryId=${categoryId}&offset=${offset}`, {
+      method: 'GET',
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+    }).then((response) => response.json())
+      .then((data) =>  {
+        dispatch(fetchMoreElementsSuccess(data))
+      })
+      .catch((e) => {
+        dispatch(fetchCatalogElementsFailure(e.message))
+      })
+  } else if (categoryId >= 0) {
     fetch(`http://localhost:7070/api/items?categoryId=${categoryId}`, {
     method: 'GET',
     headers: {
@@ -141,6 +168,19 @@ export const fetchCatalogElements = (dispatch, categoryId) => {
     .catch((e) => {
       dispatch(fetchCatalogElementsFailure(e.message))
     })
+  } else if (offset) {
+    fetch(`http://localhost:7070/api/items?offset=${offset}`, {
+      method: 'GET',
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+    }).then((response) => response.json())
+      .then((data) =>  {
+        dispatch(fetchMoreElementsSuccess(data))
+      })
+      .catch((e) => {
+        dispatch(fetchCatalogElementsFailure(e.message))
+      })
   } else {
     fetch('http://localhost:7070/api/items', {
     method: 'GET',
@@ -156,3 +196,50 @@ export const fetchCatalogElements = (dispatch, categoryId) => {
     })
   }
 }
+
+// ELEMENT
+
+export function fetchElementRequest() {
+  return {
+    type: FETCH_ELEMENT_REQUEST,
+  }
+}
+
+export function fetchElementFailure(elementError) {
+  return {
+    type: FETCH_ELEMENT_FAILURE,
+    payload: { elementError }
+  }
+}
+
+export function fetchElementSuccess(element) {
+  return {
+    type: FETCH_ELEMENT_SUCCESS,
+    payload: { element }
+  }
+}
+
+export const fetchElement = (dispatch, elementId) => {
+  dispatch(fetchElementRequest());
+  fetch(`http://localhost:7070/api/items/${elementId}`, {
+    method: 'GET',
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
+  }).then((response) => response.json())
+    .then((data) => {
+      dispatch(fetchElementSuccess(data))
+    })
+    .catch((e) => {
+      dispatch(fetchElementFailure(e.message))
+    })
+}
+
+// SELECT SIZE
+
+// export function selectSize(elementId) {
+//   return {
+//     type: SELECT_SIZE,
+//     payload: { elementId }
+//   }
+// }

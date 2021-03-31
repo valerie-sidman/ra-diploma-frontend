@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchHits } from '../actions/actionCreators';
 
@@ -52,7 +53,7 @@ export default function Hits() {
                     <div className="card-body">
                       <p className="card-text">{o.title}</p>
                       <p className="card-text">{o.price} руб.</p>
-                      <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
+                      <Link to={`/catalog/${o.id}`} className="btn btn-outline-primary">Заказать</Link>
                     </div>
                   </div>
                 </div>

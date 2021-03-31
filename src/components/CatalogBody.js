@@ -1,13 +1,17 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCategories, fetchCatalogElements, changeCategoryClassName } from '../actions/actionCreators';
+import {
+  fetchCategories,
+  fetchCatalogElements,
+  changeCategoryClassName,
+} from '../actions/actionCreators';
 
 export default function CatalogBody() {
 
   const { categories, loadingCategories, categoriesError } = useSelector(state => state.serviceCategories);
-  const { catalogElements, loadingCatalogElements, elementsError } = useSelector(state => state.serviceCatalogElements);
+  const { catalogElements, stock, loadingCatalogElements, elementsError } = useSelector(state => state.serviceCatalogElements);
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     fetchCategories(dispatch);
@@ -25,7 +29,7 @@ export default function CatalogBody() {
         </div>
       </>
     )
-  } 
+  }
 
   if (categoriesError) {
     return (
@@ -46,6 +50,11 @@ export default function CatalogBody() {
     fetchCatalogElements(dispatch, categoryId);
   }
 
+  const handleMoreElements = (e, categoryId, offset) => {
+    e.preventDefault();
+    fetchCatalogElements(dispatch, categoryId, offset);
+  }
+
   return (
     <>
       <ul className="catalog-categories nav justify-content-center">
@@ -60,21 +69,22 @@ export default function CatalogBody() {
         {catalogElements.map(o =>
           <div className="col-4" key={o.id}>
             <div className="card catalog-item-card">
-              <img src={o.images[0]}
-                className="card-img-top img-fluid" alt={o.title} />
+              <img src={o.images[0]} className="card-img-top img-fluid" alt={o.title} />
               <div className="card-body">
                 <p className="card-text">{o.title}</p>
                 <p className="card-text">{o.price} руб.</p>
-                <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
+                <Link to={`/catalog/${o.id}` } className="btn btn-outline-primary">Заказать</Link>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      <div className="text-center">
-        <button className="btn btn-outline-primary">Загрузить ещё</button>
-      </div>
+      { !stock ? null :
+        <div className="text-center">
+          <button className="btn btn-outline-primary" onClick={(e) => handleMoreElements(e, categories.find(o => o.className.includes('active')).id, catalogElements.length)}>Загрузить ещё</button>
+        </div>
+      }
     </>
   )
 }
