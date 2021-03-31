@@ -47,7 +47,7 @@ export default function сatalogElementsReducer(state = initialState, action) {
       return {
         ...state,
         catalogElements: newCatalogElements,
-        stock: catalogElements.length === 6,
+        stock: moreElements.length === 6,
         loadingCatalogElements: false,
         elementsError: null,
       }

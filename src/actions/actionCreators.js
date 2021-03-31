@@ -85,11 +85,11 @@ export const fetchCategories = (dispatch) => {
     },
   }).then((response) => response.json())
     .then((data) => {
-      data.unshift({id: -1, title: 'Все'});
+      data.forEach(o => o.className = 'nav-link');
       return data;
     })
     .then((data) => {
-      data.forEach(o => o.className = 'nav-link');
+      data.unshift({id: -1, title: 'Все', className: 'nav-link active'});
       return data;
     })
     .then((data) =>  {

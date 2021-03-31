@@ -82,7 +82,9 @@ export default function CatalogBody() {
 
       { !stock ? null :
         <div className="text-center">
-          <button className="btn btn-outline-primary" onClick={(e) => handleMoreElements(e, categories.find(o => o.className.includes('active')).id, catalogElements.length)}>Загрузить ещё</button>
+          <button className="btn btn-outline-primary" onClick={(e) =>
+            handleMoreElements(e, categories.find(o => o.className.includes('active')).id, catalogElements.length)
+          }>Загрузить ещё</button>
         </div>
       }
     </>
