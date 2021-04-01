@@ -8,16 +8,18 @@ import Contacts from './Contacts';
 import Footer from './Footer';
 import ErrorPage from './ErrorPage';
 import Product from './Product';
+import Cart from './Cart';
 
 export default function Base() {
   return (
-    <Router>
+    <Router basename={process.env.REACT_APP_PUBLIC_URL}>
       <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/catalog" component={Catalog} />
         <Route path="/catalog/:id([0-9]+)?" component={Product} />
         <Route path="/about" component={About} />
+        <Route path="/cart" component={Cart} />
         <Route path="/contacts" component={Contacts} />
         <Route component={ErrorPage} />
       </Switch>

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchElement, selectSize } from '../actions/actionCreators';
+import { fetchElement, selectSize, increaseQuantity, decreaseQuantity } from '../actions/actionCreators';
 
 export default function Product({ match }) {
-  const { element, loadingElement, elementError } = useSelector(state => state.serviceElement);
+  const { element, quantity, loadingElement, elementError } = useSelector(state => state.serviceElement);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,10 +32,20 @@ export default function Product({ match }) {
     )
   }
 
-  // const handleSelectSize = (e, elementId) => {
-  //   e.preventDefault();
-  //   dispatch(selectSize(elementId));
-  // }
+  const handleSelectSize = (e, sizeId) => {
+    e.preventDefault();
+    dispatch(selectSize(sizeId));
+  }
+
+  const handleCounterIncrease  = (e) => {
+    e.preventDefault();
+    dispatch(increaseQuantity());
+  }
+
+  const handleCounterDecrease  = (e) => {
+    e.preventDefault();
+    dispatch(decreaseQuantity());
+  }
 
   return (
     <>
@@ -76,20 +87,35 @@ export default function Product({ match }) {
                       </tr>
                     </tbody>
                   </table>
+
                   <div className="text-center">
+
                     <p>Размеры в наличии:
-                      {element.sizes.map((s) => s.avalible ?
-                      <span className="catalog-item-size">{s.size}</span> : null
-                    )}
+                      {element.sizes.find((s) => s.avalible) ?
+                        element.sizes.filter((s) => s.avalible).map((s) => 
+                          <span className={s.className} key={s.size} onClick={(e) => handleSelectSize(e, s.size)}>{s.size}</span>
+                        )
+                        : ' Извините, ни одного размера в наличии нет.'
+                      }
                     </p>
-                    <p>Количество: <span className="btn-group btn-group-sm pl-2">
-                      <button className="btn btn-secondary">-</button>
-                      <span className="btn btn-outline-primary">1</span>
-                      <button className="btn btn-secondary">+</button>
-                    </span>
-                    </p>
+
+                    {element.sizes.find((s) => s.avalible) ?
+                      <>
+                        <p>Количество:
+                          <span className="btn-group btn-group-sm pl-2">
+                            <button className="btn btn-secondary" onClick={(e) => handleCounterDecrease(e)}>-</button>
+                            <span className="btn btn-outline-primary">{quantity}</span>
+                            <button className="btn btn-secondary" onClick={(e) => handleCounterIncrease(e)}>+</button>
+                          </span>
+                        </p>
+                        <Link to={"/cart"} className="btn btn-danger btn-block btn-lg" disabled={
+                          element.sizes.find((s) => s.className.includes('selected')) ? false : true
+                        }>В корзину</Link>
+                    </>
+                      : null
+                    }
+
                   </div>
-                  <button className="btn btn-danger btn-block btn-lg">В корзину</button>
                 </div>
               </div>
             </section>

@@ -2,8 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../img/header-logo.png';
 import banner from '../img/banner.jpg';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  highlightingMenuItem,
+} from '../actions/actionCreators';
 
 export default function Header() {
+
+  const { clickedItem } = useSelector(state => state.serviceToggleState);
+  const dispatch = useDispatch();
+
+  const handleToggleClassName = (clickedItem) => {
+    dispatch(highlightingMenuItem(clickedItem))
+  }
+
   return (
     <header className="container">
       <div className="row">
@@ -14,16 +26,16 @@ export default function Header() {
             </Link>
             <div className="collapase navbar-collapse" id="navbarMain">
               <ul className="navbar-nav mr-auto">
-                <li className="nav-item active">
+                <li className={clickedItem === 'main' ? 'nav-item active' : 'nav-item'} onClick={() => handleToggleClassName('main')}>
                   <Link className="nav-link" to="/">Главная</Link>
                 </li>
-                <li className="nav-item">
+                <li className={clickedItem === 'catalog' ? 'nav-item active' : 'nav-item'} onClick={() => handleToggleClassName('catalog')}>
                   <Link className="nav-link" to="/catalog">Каталог</Link>
                 </li>
-                <li className="nav-item">
+                <li className={clickedItem === 'about' ? 'nav-item active' : 'nav-item'} onClick={() => handleToggleClassName('about')}>
                   <Link className="nav-link" to="/about">О магазине</Link>
                 </li>
-                <li className="nav-item">
+                <li className={clickedItem === 'contacts' ? 'nav-item active' : 'nav-item'} onClick={() => handleToggleClassName('contacts')}>
                   <Link className="nav-link" to="/contacts">Контакты</Link>
                 </li>
               </ul>

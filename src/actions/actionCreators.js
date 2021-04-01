@@ -13,7 +13,10 @@ import {
   FETCH_ELEMENT_REQUEST,
   FETCH_ELEMENT_FAILURE,
   FETCH_ELEMENT_SUCCESS,
-  // SELECT_SIZE
+  SELECT_SIZE,
+  INCREASE_THE_NUMBER,
+  DECREASE_THE_NUMBER,
+  HIGHLIGHTING_MENU_ITEM
 } from './actionTypes';
 
 // HITS
@@ -40,7 +43,7 @@ export function fetchHitsSuccess(hits) {
 
 export const fetchHits = (dispatch) => {
   dispatch(fetchHitsRequest());
-  fetch('http://localhost:7070/api/top-sales', {
+  fetch('https://ra-diploma-backend.herokuapp.com/api/top-sales', {
     method: 'GET',
     headers: {
       'Access-Control-Allow-Origin': '*'
@@ -78,7 +81,7 @@ export function fetchCategoriesSuccess(categories) {
 
 export const fetchCategories = (dispatch) => {
   dispatch(fetchCategoriesRequest());
-  fetch('http://localhost:7070/api/categories', {
+  fetch('https://ra-diploma-backend.herokuapp.com/api/categories', {
     method: 'GET',
     headers: {
       'Access-Control-Allow-Origin': '*'
@@ -143,7 +146,7 @@ export function fetchMoreElementsSuccess(moreElements) {
 export const fetchCatalogElements = (dispatch, categoryId, offset) => {
   dispatch(fetchCatalogElementsRequest());
   if (categoryId >= 0 && offset) {
-    fetch(`http://localhost:7070/api/items?categoryId=${categoryId}&offset=${offset}`, {
+    fetch(`https://ra-diploma-backend.herokuapp.com/api/items?categoryId=${categoryId}&offset=${offset}`, {
       method: 'GET',
       headers: {
         'Access-Control-Allow-Origin': '*'
@@ -156,7 +159,7 @@ export const fetchCatalogElements = (dispatch, categoryId, offset) => {
         dispatch(fetchCatalogElementsFailure(e.message))
       })
   } else if (categoryId >= 0) {
-    fetch(`http://localhost:7070/api/items?categoryId=${categoryId}`, {
+    fetch(`https://ra-diploma-backend.herokuapp.com/api/items?categoryId=${categoryId}`, {
     method: 'GET',
     headers: {
       'Access-Control-Allow-Origin': '*'
@@ -169,7 +172,7 @@ export const fetchCatalogElements = (dispatch, categoryId, offset) => {
       dispatch(fetchCatalogElementsFailure(e.message))
     })
   } else if (offset) {
-    fetch(`http://localhost:7070/api/items?offset=${offset}`, {
+    fetch(`https://ra-diploma-backend.herokuapp.com/api/items?offset=${offset}`, {
       method: 'GET',
       headers: {
         'Access-Control-Allow-Origin': '*'
@@ -182,7 +185,7 @@ export const fetchCatalogElements = (dispatch, categoryId, offset) => {
         dispatch(fetchCatalogElementsFailure(e.message))
       })
   } else {
-    fetch('http://localhost:7070/api/items', {
+    fetch('https://ra-diploma-backend.herokuapp.com/api/items', {
     method: 'GET',
     headers: {
       'Access-Control-Allow-Origin': '*'
@@ -221,12 +224,16 @@ export function fetchElementSuccess(element) {
 
 export const fetchElement = (dispatch, elementId) => {
   dispatch(fetchElementRequest());
-  fetch(`http://localhost:7070/api/items/${elementId}`, {
+  fetch(`https://ra-diploma-backend.herokuapp.com/api/items/${elementId}`, {
     method: 'GET',
     headers: {
       'Access-Control-Allow-Origin': '*'
     },
   }).then((response) => response.json())
+    .then((data) => {
+      data.sizes.forEach(o => o.className = 'catalog-item-size');
+      return data;
+    })
     .then((data) => {
       dispatch(fetchElementSuccess(data))
     })
@@ -237,9 +244,31 @@ export const fetchElement = (dispatch, elementId) => {
 
 // SELECT SIZE
 
-// export function selectSize(elementId) {
-//   return {
-//     type: SELECT_SIZE,
-//     payload: { elementId }
-//   }
-// }
+export function selectSize(sizeId) {
+  return {
+    type: SELECT_SIZE,
+    payload: { sizeId }
+  }
+}
+
+// COUNTER
+export function increaseQuantity() {
+  return {
+    type: INCREASE_THE_NUMBER,
+  }
+}
+
+export function decreaseQuantity() {
+  return {
+    type: DECREASE_THE_NUMBER,
+  }
+}
+
+// HIGHLIGHTING MENU ITEM
+
+export function highlightingMenuItem(clickedItem) {
+  return {
+    type: HIGHLIGHTING_MENU_ITEM,
+    payload: { clickedItem }
+  }
+}

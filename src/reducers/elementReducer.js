@@ -2,7 +2,9 @@ import {
   FETCH_ELEMENT_REQUEST,
   FETCH_ELEMENT_FAILURE,
   FETCH_ELEMENT_SUCCESS,
-  // SELECT_SIZE
+  SELECT_SIZE,
+  INCREASE_THE_NUMBER,
+  DECREASE_THE_NUMBER
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -22,9 +24,11 @@ const initialState = {
       {
         size: '',
         avalible: Boolean,
+        className: '',
       }
     ],
   },
+  quantity: 1,
   loadingElement: false,
   elementError: null,
 }
@@ -54,18 +58,46 @@ export default function elementReducer(state = initialState, action) {
         loadingElement: false,
         elementError: null,
       }
-    // case SELECT_SIZE:
-    //   const { sizeId } = action.payload;
-    //   const sizeIndex = state.element.sizes.findIndex((size) => size.id === sizeId);
-    //   const newSizes = state.element.sizes;
-    //   newSizes.forEach((c) => c.className = 'catalog-item-size');
-    //   newSizes[sizeIndex].className = 'catalog-item-size selected';
-    //   return {
-    //     ...state,
-    //     element: {
-    //       sizes: newSizes,
-    //     }
-    //   }
+    case SELECT_SIZE:
+      const { sizeId } = action.payload;
+      const sizeIndex = state.element.sizes.findIndex((size) => size.size === sizeId);
+      const newSizes = state.element.sizes;
+
+      if (newSizes[sizeIndex].className.includes('selected')) {
+        newSizes[sizeIndex].className = 'catalog-item-size';
+      } else {
+        newSizes.forEach((c) => c.className = 'catalog-item-size');
+        newSizes[sizeIndex].className = 'catalog-item-size selected';
+      }
+
+      const newStateElement = state.element;
+      newStateElement.sizes = newSizes;
+
+      return {
+        ...state,
+        element: newStateElement,
+      }
+    case INCREASE_THE_NUMBER:
+      let newQuantityInc = state.quantity;
+      if (state.quantity >= 1 && state.quantity < 10) {
+        const increaseQuantity = state.quantity += 1;
+        newQuantityInc = increaseQuantity;
+      }
+      return {
+        ...state,
+        quantity: newQuantityInc,
+      }
+    case DECREASE_THE_NUMBER:
+      let newQuantityDec = state.quantity;
+      if (state.quantity > 1 && state.quantity <= 10) {
+        const decreaseQuantity = state.quantity -= 1;
+        newQuantityDec = decreaseQuantity;
+      }
+      
+      return {
+        ...state,
+        quantity: newQuantityDec,
+      }
     default:
       return state;
   }
