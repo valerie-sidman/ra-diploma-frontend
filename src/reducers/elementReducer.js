@@ -4,7 +4,8 @@ import {
   FETCH_ELEMENT_SUCCESS,
   SELECT_SIZE,
   INCREASE_THE_NUMBER,
-  DECREASE_THE_NUMBER
+  DECREASE_THE_NUMBER,
+  DEFAULT_THE_NUMBER
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -93,10 +94,16 @@ export default function elementReducer(state = initialState, action) {
         const decreaseQuantity = state.quantity -= 1;
         newQuantityDec = decreaseQuantity;
       }
-      
       return {
         ...state,
         quantity: newQuantityDec,
+      }
+    case DEFAULT_THE_NUMBER:
+      let defaultQuantity = state.quantity;
+      defaultQuantity = 1;
+      return {
+        ...state,
+        quantity: defaultQuantity,
       }
     default:
       return state;

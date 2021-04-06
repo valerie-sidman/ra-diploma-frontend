@@ -42,11 +42,12 @@ export default function сatalogElementsReducer(state = initialState, action) {
       }
     case FETCH_MORE_ELEMENTS_SUCCESS:
       const { moreElements } = action.payload;
-      const newCatalogElements = state.catalogElements.concat(moreElements);
-      console.log(newCatalogElements);
       return {
         ...state,
-        catalogElements: newCatalogElements,
+        catalogElements: [
+          ...state.catalogElements,
+          ...moreElements
+        ],
         stock: moreElements.length === 6,
         loadingCatalogElements: false,
         elementsError: null,

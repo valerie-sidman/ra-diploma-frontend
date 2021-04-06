@@ -1,22 +1,44 @@
-import { 
+import {
   FETCH_HITS_REQUEST,
   FETCH_HITS_FAILURE,
   FETCH_HITS_SUCCESS,
+
   FETCH_CATEGORIES_REQUEST,
   FETCH_CATEGORIES_FAILURE,
   FETCH_CATEGORIES_SUCCESS,
+
   CHANGE_CATEGORIES_CLASSNAME,
+
   FETCH_CATALOG_ELEMENTS_REQUEST,
   FETCH_CATALOG_ELEMENTS_FAILURE,
   FETCH_CATALOG_ELEMENTS_SUCCESS,
+
   FETCH_MORE_ELEMENTS_SUCCESS,
+
   FETCH_ELEMENT_REQUEST,
   FETCH_ELEMENT_FAILURE,
   FETCH_ELEMENT_SUCCESS,
+
   SELECT_SIZE,
+
   INCREASE_THE_NUMBER,
   DECREASE_THE_NUMBER,
-  HIGHLIGHTING_MENU_ITEM
+  DEFAULT_THE_NUMBER,
+
+  TOGGLE_CLASSNAME,
+  TOGGLE_SEARCH,
+
+  CHANGE_FIELD,
+
+  DELAY_SEARCH,
+
+  SENDING_TO_CART,
+  REMOVE_FROM_CART,
+
+  SEND_AN_ORDER_REQUEST,
+  SEND_AN_ORDER_FAILURE,
+  SEND_AN_ORDER_SUCCESS
+
 } from './actionTypes';
 
 // HITS
@@ -49,7 +71,7 @@ export const fetchHits = (dispatch) => {
       'Access-Control-Allow-Origin': '*'
     },
   }).then((response) => response.json())
-    .then((data) =>  {
+    .then((data) => {
       dispatch(fetchHitsSuccess(data))
     })
     .catch((e) => {
@@ -92,10 +114,10 @@ export const fetchCategories = (dispatch) => {
       return data;
     })
     .then((data) => {
-      data.unshift({id: -1, title: 'Все', className: 'nav-link active'});
+      data.unshift({ id: -1, title: 'Все', className: 'nav-link active' });
       return data;
     })
-    .then((data) =>  {
+    .then((data) => {
       dispatch(fetchCategoriesSuccess(data))
     })
     .catch((e) => {
@@ -143,60 +165,116 @@ export function fetchMoreElementsSuccess(moreElements) {
   }
 }
 
-export const fetchCatalogElements = (dispatch, categoryId, offset) => {
+export const fetchCatalogElements = (dispatch, categoryId, offset, query) => {
   dispatch(fetchCatalogElementsRequest());
-  if (categoryId >= 0 && offset) {
-    fetch(`https://ra-diploma-backend.herokuapp.com/api/items?categoryId=${categoryId}&offset=${offset}`, {
-      method: 'GET',
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
-    }).then((response) => response.json())
-      .then((data) =>  {
-        dispatch(fetchMoreElementsSuccess(data))
-      })
-      .catch((e) => {
-        dispatch(fetchCatalogElementsFailure(e.message))
-      })
-  } else if (categoryId >= 0) {
-    fetch(`https://ra-diploma-backend.herokuapp.com/api/items?categoryId=${categoryId}`, {
-    method: 'GET',
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-  }).then((response) => response.json())
-    .then((data) =>  {
-      dispatch(fetchCatalogElementsSuccess(data))
-    })
-    .catch((e) => {
-      dispatch(fetchCatalogElementsFailure(e.message))
-    })
-  } else if (offset) {
-    fetch(`https://ra-diploma-backend.herokuapp.com/api/items?offset=${offset}`, {
-      method: 'GET',
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
-    }).then((response) => response.json())
-      .then((data) =>  {
-        dispatch(fetchMoreElementsSuccess(data))
-      })
-      .catch((e) => {
-        dispatch(fetchCatalogElementsFailure(e.message))
-      })
-  } else {
-    fetch('https://ra-diploma-backend.herokuapp.com/api/items', {
-    method: 'GET',
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-  }).then((response) => response.json())
-    .then((data) =>  {
-      dispatch(fetchCatalogElementsSuccess(data))
-    })
-    .catch((e) => {
-      dispatch(fetchCatalogElementsFailure(e.message))
-    })
+  if (query) {
+    if (categoryId >= 0 && offset) {
+      fetch(`https://ra-diploma-backend.herokuapp.com/api/items?categoryId=${categoryId}&offset=${offset}&q=${query}`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          dispatch(fetchMoreElementsSuccess(data))
+        })
+        .catch((e) => {
+          dispatch(fetchCatalogElementsFailure(e.message))
+        })
+    } else if (categoryId >= 0) {
+      fetch(`https://ra-diploma-backend.herokuapp.com/api/items?categoryId=${categoryId}&q=${query}`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          dispatch(fetchCatalogElementsSuccess(data))
+        })
+        .catch((e) => {
+          dispatch(fetchCatalogElementsFailure(e.message))
+        })
+    } else if (offset) {
+      fetch(`https://ra-diploma-backend.herokuapp.com/api/items?offset=${offset}&q=${query}`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          dispatch(fetchMoreElementsSuccess(data))
+        })
+        .catch((e) => {
+          dispatch(fetchCatalogElementsFailure(e.message))
+        })
+    } else {
+      fetch(`https://ra-diploma-backend.herokuapp.com/api/items?q=${query}`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          dispatch(fetchCatalogElementsSuccess(data))
+        })
+        .catch((e) => {
+          dispatch(fetchCatalogElementsFailure(e.message))
+        })
+    }
+  } else if (!query) {
+    if (categoryId >= 0 && offset) {
+      fetch(`https://ra-diploma-backend.herokuapp.com/api/items?categoryId=${categoryId}&offset=${offset}`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          dispatch(fetchMoreElementsSuccess(data))
+        })
+        .catch((e) => {
+          dispatch(fetchCatalogElementsFailure(e.message))
+        })
+    } else if (categoryId >= 0) {
+      fetch(`https://ra-diploma-backend.herokuapp.com/api/items?categoryId=${categoryId}`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          dispatch(fetchCatalogElementsSuccess(data))
+        })
+        .catch((e) => {
+          dispatch(fetchCatalogElementsFailure(e.message))
+        })
+    } else if (offset) {
+      fetch(`https://ra-diploma-backend.herokuapp.com/api/items?offset=${offset}`, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          dispatch(fetchMoreElementsSuccess(data))
+        })
+        .catch((e) => {
+          dispatch(fetchCatalogElementsFailure(e.message))
+        })
+    } else {
+      fetch('https://ra-diploma-backend.herokuapp.com/api/items', {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          dispatch(fetchCatalogElementsSuccess(data))
+        })
+        .catch((e) => {
+          dispatch(fetchCatalogElementsFailure(e.message))
+        })
+    }
   }
 }
 
@@ -264,11 +342,102 @@ export function decreaseQuantity() {
   }
 }
 
-// HIGHLIGHTING MENU ITEM
-
-export function highlightingMenuItem(clickedItem) {
+export function defaultQuantity() {
   return {
-    type: HIGHLIGHTING_MENU_ITEM,
+    type: DEFAULT_THE_NUMBER,
+  }
+}
+
+// TOGGLE CLASS NAME, TOGGLE SEARCH, DELAY SEARCH
+
+export function toggleClassName(clickedItem) {
+  return {
+    type: TOGGLE_CLASSNAME,
     payload: { clickedItem }
   }
+}
+
+export function toggleSearch(search) {
+  return {
+    type: TOGGLE_SEARCH,
+    payload: { search }
+  }
+}
+
+export function delaySearch(timeout) {
+  return {
+    type: DELAY_SEARCH,
+    payload: { timeout }
+  }
+}
+
+// CHANGE FIELD
+
+export function changeField(name, value) {
+  return {
+    type: CHANGE_FIELD,
+    payload: { name, value },
+  }
+}
+
+// CART
+
+export function sendingToCart(id, name, size, quantity, price) {
+  return {
+    type: SENDING_TO_CART,
+    payload: { id, name, size, quantity, price }
+  }
+}
+
+export function removeFromCart(id) {
+  return {
+    type: REMOVE_FROM_CART,
+    payload: { id }
+  }
+}
+
+// SEND AN ORDER
+
+export function sendingOrderRequest() {
+  return {
+    type: SEND_AN_ORDER_REQUEST,
+  }
+}
+
+export function sendingOrderFailure(sendingError) {
+  return {
+    type: SEND_AN_ORDER_FAILURE,
+    payload: { sendingError }
+  }
+}
+
+export function sendingOrderSuccess(owner, items) {
+  return {
+    type: SEND_AN_ORDER_SUCCESS,
+    payload: { owner, items }
+  }
+}
+
+export const sendingOrder = (dispatch, owner, items) => {
+  dispatch(sendingOrderRequest());
+  fetch('https://ra-diploma-backend.herokuapp.com/api/order', {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }),
+    body: JSON.stringify(
+      { owner, items }
+    ),
+  }).then((response) => response.json())
+    .then((data) => {
+      data.sizes.forEach(o => o.className = 'catalog-item-size');
+      return data;
+    })
+    .then((data) => {
+      dispatch(sendingOrderSuccess(data))
+    })
+    .catch((e) => {
+      dispatch(sendingOrderFailure(e.message))
+    })
 }

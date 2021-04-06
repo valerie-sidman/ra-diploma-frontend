@@ -1,30 +1,29 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchElement, selectSize, increaseQuantity, decreaseQuantity } from '../actions/actionCreators';
+import {
+  fetchElement,
+  selectSize,
+  increaseQuantity,
+  decreaseQuantity,
+  defaultQuantity,
+  sendingToCart
+} from '../actions/actionCreators';
 
 export default function Product({ match }) {
   const { element, quantity, loadingElement, elementError } = useSelector(state => state.serviceElement);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     fetchElement(dispatch, match.params.id);
   }, [dispatch, match.params.id]);
 
-  if (loadingElement) {
-    return (
-      <>
-        <div className="preloader">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </>
-    )
-  }
+
+  // обработка ошибки
 
   if (elementError) {
+    history.push("/errorloading");
     return (
       <>
         {console.log('Error with loading element!!!')}
@@ -32,19 +31,33 @@ export default function Product({ match }) {
     )
   }
 
+  // конец обработки ошибки
+
   const handleSelectSize = (e, sizeId) => {
     e.preventDefault();
     dispatch(selectSize(sizeId));
   }
 
-  const handleCounterIncrease  = (e) => {
+  const handleCounterIncrease = (e) => {
     e.preventDefault();
     dispatch(increaseQuantity());
   }
 
-  const handleCounterDecrease  = (e) => {
+  const handleCounterDecrease = (e) => {
     e.preventDefault();
     dispatch(decreaseQuantity());
+  }
+
+  const handleSendingToCart = () => {
+    dispatch(sendingToCart(
+      element.id,
+      element.title,
+      element.sizes.find((s) => s.className.includes('selected')).size,
+      quantity,
+      element.price,
+    ));
+    dispatch(defaultQuantity());
+    history.push("/cart");
   }
 
   return (
@@ -56,7 +69,11 @@ export default function Product({ match }) {
               <h2 className="text-center">{element.title}</h2>
               <div className="row">
                 <div className="col-5">
-                  <img src={element.images[0]} className="img-fluid" alt="" />
+                  <img
+                    onError={(event) => event.target.setAttribute("src", "https://elbel.by/image/cache/catalog/nastennye-bra-folder/0/oad-iblock-21a-21affe2dd1950db04594ed01f01a2fb0-400x400.jpg")}
+                    src={element.images[0]}
+                    className="img-fluid"
+                    alt="" />
                 </div>
                 <div className="col-7">
                   <table className="table table-bordered">
@@ -92,7 +109,7 @@ export default function Product({ match }) {
 
                     <p>Размеры в наличии:
                       {element.sizes.find((s) => s.avalible) ?
-                        element.sizes.filter((s) => s.avalible).map((s) => 
+                        element.sizes.filter((s) => s.avalible).map((s) =>
                           <span className={s.className} key={s.size} onClick={(e) => handleSelectSize(e, s.size)}>{s.size}</span>
                         )
                         : ' Извините, ни одного размера в наличии нет.'
@@ -108,10 +125,13 @@ export default function Product({ match }) {
                             <button className="btn btn-secondary" onClick={(e) => handleCounterIncrease(e)}>+</button>
                           </span>
                         </p>
-                        <Link to={"/cart"} className="btn btn-danger btn-block btn-lg" disabled={
-                          element.sizes.find((s) => s.className.includes('selected')) ? false : true
-                        }>В корзину</Link>
-                    </>
+                        <button
+                          className="btn btn-danger btn-block btn-lg"
+                          onClick={() => handleSendingToCart()}
+                          disabled={
+                            element.sizes.find((s) => s.className.includes('selected')) ? false : true
+                          }>В корзину</button>
+                      </>
                       : null
                     }
 
@@ -122,6 +142,18 @@ export default function Product({ match }) {
           </div>
         </div>
       </main>
+
+      {
+        // обработка загрузки
+        loadingElement ?
+          <div className="preloader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div> : null
+        // конец обработки загрузки
+      }
     </>
   )
 

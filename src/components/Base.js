@@ -9,6 +9,8 @@ import Footer from './Footer';
 import ErrorPage from './ErrorPage';
 import Product from './Product';
 import Cart from './Cart';
+import SuccessPage from './SuccessPage';
+import ErrorLoadingPage from './ErrorLoadingPage';
 
 export default function Base() {
   return (
@@ -21,6 +23,8 @@ export default function Base() {
         <Route path="/about" component={About} />
         <Route path="/cart" component={Cart} />
         <Route path="/contacts" component={Contacts} />
+        <Route path="/success" component={SuccessPage} />
+        <Route path="/errorloading" component={ErrorLoadingPage} />
         <Route component={ErrorPage} />
       </Switch>
       <Footer />
