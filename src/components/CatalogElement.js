@@ -1,17 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SafeImage from './SafeImage';
 
 export default function CatalogElement({ catalogElements }) {
   return (
     <div className="row">
+      {catalogElements.length === 0 ?
+        <p>Извините, по данному запросу товаров не найдено</p> : null}
       {catalogElements.map(element =>
         <div className="col-4" key={element.id}>
           <div className="card catalog-item-card">
-            <img
-              onError={(event) => event.target.setAttribute("src", "https://elbel.by/image/cache/catalog/nastennye-bra-folder/0/oad-iblock-21a-21affe2dd1950db04594ed01f01a2fb0-400x400.jpg")}
+
+            <SafeImage
               src={element.images[0]}
               className="card-img-top img-fluid"
-              alt={element.title} />
+              alt={element.title}
+            />
+            
             <div className="card-body">
               <p className="card-text">{element.title}</p>
               <p className="card-text">{element.price} руб.</p>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import SafeImage from './SafeImage';
 import {
   fetchElement,
   selectSize,
@@ -69,11 +70,13 @@ export default function Product({ match }) {
               <h2 className="text-center">{element.title}</h2>
               <div className="row">
                 <div className="col-5">
-                  <img
-                    onError={(event) => event.target.setAttribute("src", "https://elbel.by/image/cache/catalog/nastennye-bra-folder/0/oad-iblock-21a-21affe2dd1950db04594ed01f01a2fb0-400x400.jpg")}
+
+                  <SafeImage
                     src={element.images[0]}
                     className="img-fluid"
-                    alt="" />
+                    alt=""
+                  />
+
                 </div>
                 <div className="col-7">
                   <table className="table table-bordered">

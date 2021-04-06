@@ -34,6 +34,7 @@ import {
 
   SENDING_TO_CART,
   REMOVE_FROM_CART,
+  EMPTY_CART,
 
   SEND_AN_ORDER_REQUEST,
   SEND_AN_ORDER_FAILURE,
@@ -393,6 +394,12 @@ export function removeFromCart(id) {
   return {
     type: REMOVE_FROM_CART,
     payload: { id }
+  }
+}
+
+export function emptyCart() {
+  return {
+    type: EMPTY_CART
   }
 }
 

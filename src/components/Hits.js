@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchHits } from '../actions/actionCreators';
+import SafeImage from './SafeImage';
 
 export default function Hits() {
   const { hits, loading, error } = useSelector(state => state.serviceHits);
@@ -38,8 +39,13 @@ export default function Hits() {
                 {hits.map(o =>
                   <div className="col-4" key={o.id}>
                     <div className="card">
-                      <img src={o.images[0] || o.images[1]}
-                        className="card-img-top img-fluid" alt={o.title} />
+
+                      <SafeImage
+                        src={o.images[0]}
+                        className="card-img-top img-fluid"
+                        alt={o.title}
+                      />
+
                       <div className="card-body">
                         <p className="card-text">{o.title}</p>
                         <p className="card-text">{o.price} руб.</p>

@@ -1,7 +1,12 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, sendingOrder, changeField } from '../actions/actionCreators';
+import {
+  removeFromCart,
+  sendingOrder,
+  changeField,
+  emptyCart
+} from '../actions/actionCreators';
 
 export default function Cart() {
 
@@ -54,6 +59,7 @@ export default function Cart() {
       })
     );
     history.push("/success");
+    dispatch(emptyCart());
   }
 
   return (

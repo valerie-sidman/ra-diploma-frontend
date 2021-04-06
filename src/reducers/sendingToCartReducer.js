@@ -1,4 +1,9 @@
-import { SENDING_TO_CART, REMOVE_FROM_CART, CHANGE_FIELD } from '../actions/actionTypes';
+import {
+  SENDING_TO_CART,
+  REMOVE_FROM_CART,
+  CHANGE_FIELD,
+  EMPTY_CART
+} from '../actions/actionTypes';
 
 // id: null,
 // name: '',
@@ -39,6 +44,15 @@ export default function sendingToCartReducer(state = initialState, action) {
       return {
         ...state,
         cartItems: newRemItems,
+      }
+    case EMPTY_CART:
+      return {
+        ...state,
+        cartItems: [],
+        fields: {
+          phoneField: '',
+          addressField: '',
+        }
       }
     case CHANGE_FIELD:
       return {
