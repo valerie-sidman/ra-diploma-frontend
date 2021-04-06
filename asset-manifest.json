@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/ra-diploma-frontend/static/css/main.70337f0c.chunk.css",
+    "main.js": "/ra-diploma-frontend/static/js/main.2b410169.chunk.js",
+    "main.js.map": "/ra-diploma-frontend/static/js/main.2b410169.chunk.js.map",
+    "runtime-main.js": "/ra-diploma-frontend/static/js/runtime-main.4f59c154.js",
+    "runtime-main.js.map": "/ra-diploma-frontend/static/js/runtime-main.4f59c154.js.map",
+    "static/js/2.8c1dd58b.chunk.js": "/ra-diploma-frontend/static/js/2.8c1dd58b.chunk.js",
+    "static/js/2.8c1dd58b.chunk.js.map": "/ra-diploma-frontend/static/js/2.8c1dd58b.chunk.js.map",
+    "static/js/3.f7af63a5.chunk.js": "/ra-diploma-frontend/static/js/3.f7af63a5.chunk.js",
+    "static/js/3.f7af63a5.chunk.js.map": "/ra-diploma-frontend/static/js/3.f7af63a5.chunk.js.map",
+    "index.html": "/ra-diploma-frontend/index.html",
+    "static/css/main.70337f0c.chunk.css.map": "/ra-diploma-frontend/static/css/main.70337f0c.chunk.css.map",
+    "static/js/2.8c1dd58b.chunk.js.LICENSE.txt": "/ra-diploma-frontend/static/js/2.8c1dd58b.chunk.js.LICENSE.txt",
+    "static/media/banner.5fd2c60d.jpg": "/ra-diploma-frontend/static/media/banner.5fd2c60d.jpg",
+    "static/media/App.css": "/ra-diploma-frontend/static/media/footer-sprite.b3d5697a.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4f59c154.js",
+    "static/js/2.8c1dd58b.chunk.js",
+    "static/css/main.70337f0c.chunk.css",
+    "static/js/main.2b410169.chunk.js"
+  ]
+}
